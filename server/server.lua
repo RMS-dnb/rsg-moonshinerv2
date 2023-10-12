@@ -230,7 +230,7 @@ RegisterNetEvent('rsg-moonshine:server:addcredit', function(newcredit, removemon
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     -- remove money
-    Player.Functions.RemoveMoney("cash", removemoney, "gangcamp-credit")
+    Player.Functions.RemoveMoney("cash", removemoney, "moonshiner-credit")
     -- sql update
     MySQL.update('UPDATE moonshiner_props SET credit = ? WHERE propid = ?', {newcredit, propid})
     -- notify
@@ -244,7 +244,7 @@ RegisterNetEvent('rsg-moonshine:server:removecredit', function(newcredit, addmon
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     -- remove money
-    Player.Functions.AddMoney("cash", addmoney, "gangcamp-credit")
+    Player.Functions.AddMoney("cash", addmoney, "moonshiner-credit")
     -- sql update
     MySQL.update('UPDATE moonshiner_props SET credit = ? WHERE propid = ?', {newcredit, propid})
     -- notify
@@ -265,7 +265,7 @@ AddEventHandler('rsg-moonshine:server:removeitem', function(item, amount)
 end)
 
 --------------------------------------------------------------------------------------------------
--- gangcamp upkeep system
+-- moonshiner upkeep system
 --------------------------------------------------------------------------------------------------
 UpkeepInterval = function()
     local result = MySQL.query.await('SELECT * FROM moonshiner_props')
@@ -300,7 +300,7 @@ UpkeepInterval = function()
 
     ::continue::
 
-    print('gangcamp upkeep cycle complete')
+    print('moonshiner upkeep cycle complete')
 
     SetTimeout(Config.BillingCycle * (60 * 60 * 1000), UpkeepInterval) -- hours
     --SetTimeout(Config.BillingCycle * (60 * 1000), UpkeepInterval) -- mins (for testing)

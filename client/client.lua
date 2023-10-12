@@ -1,5 +1,5 @@
 local RSGCore = exports['rsg-core']:GetCoreObject()
-local GangCampGroup = GetRandomIntInRange(0, 0xffffff)
+local moonshinerGroup = GetRandomIntInRange(0, 0xffffff)
 local CoolDown = 0
 local SpawnedProps = {}
 local isBusy = false
@@ -162,7 +162,7 @@ RegisterNetEvent('rsg-moonshine:client:mainmenu', function(gang)
     local playergang = PlayerData.gang.name
     if playergang == gang then
         lib.registerContext({
-            id = 'gangcamp_mainmenu',
+            id = 'moonshiner_mainmenu',
             title = 'Moonshine Menu',
             options = {
                 {
@@ -199,23 +199,23 @@ RegisterNetEvent('rsg-moonshine:client:mainmenu', function(gang)
                 
             }
         })
-        lib.showContext("gangcamp_mainmenu")
+        lib.showContext("moonshiner_mainmenu")
     else
         lib.registerContext({
-            id = 'gangcamp_robmenu',
+            id = 'moonshiner_robmenu',
             title = 'Rob Moonshiner Camp Menu',
             options = {
                 {
                     title = 'Rob Moonshine Camp',
                     description = 'rob this moonshine camp',
                     icon = 'fa-solid fa-mask',
-                    event = 'rsg-moonshine:client:robgangcamp',
+                    event = 'rsg-moonshine:client:robmoonshiner',
                     args = { gang = gang },
                     arrow = true
                 },
             }
         })
-        lib.showContext("gangcamp_robmenu")
+        lib.showContext("moonshiner_robmenu")
     end
 end)
 
@@ -234,23 +234,23 @@ AddEventHandler('rsg-moonshine:client:campitemsmenu', function(data)
             }
         end
         lib.registerContext({
-            id = 'gangcamp_deployed',
+            id = 'moonshiner_deployed',
             title = 'Deployed Items',
-            menu = 'gangcamp_mainmenu',
+            menu = 'moonshiner_mainmenu',
             onBack = function() end,
             position = 'top-right',
             options = options
         })
-        lib.showContext('gangcamp_deployed')        
+        lib.showContext('moonshiner_deployed')        
     end
 end)
 
 RegisterNetEvent('rsg-moonshine:client:propmenu', function(data)
     RSGCore.Functions.TriggerCallback('rsg-moonshine:server:getallpropdata', function(result)
         lib.registerContext({
-            id = 'gangcamp_propmenu',
+            id = 'moonshiner_propmenu',
             title = RSGCore.Shared.Items[result[1].proptype].label,
-            menu = 'gangcamp_deployed',
+            menu = 'moonshiner_deployed',
             onBack = function() end,
             options = {
                 {
@@ -296,7 +296,7 @@ RegisterNetEvent('rsg-moonshine:client:propmenu', function(data)
                 },
             }
         })
-        lib.showContext("gangcamp_propmenu")
+        lib.showContext("moonshiner_propmenu")
         StopSmokeEffect()
     end, data.propid)
 end)
@@ -375,7 +375,7 @@ AddEventHandler('rsg-moonshine:client:removePropObject', function(prop)
     if lib.progressCircle({
         duration = Config.BrewTime,
         position = 'bottom',
-        label = 'Removing prop object...',
+        label = 'Removing The Equipment...',
         useWhileDead = false,
         canCancel = false,
         anim = {
@@ -384,7 +384,7 @@ AddEventHandler('rsg-moonshine:client:removePropObject', function(prop)
             flag = 15,
         },
         disableControl = true,
-        text = 'Removing prop object...',
+        text = 'Removing The Equipment...',
     }) then
         -- Code to execute if the progress circle is successfully started
         print("Removing prop object progress started.")
@@ -444,10 +444,11 @@ AddEventHandler('rsg-moonshine:client:placeNewProp', function(proptype, pHash, i
         if lib.progressCircle({
             duration = 10000, -- Adjust the duration as needed
             position = 'bottom',
-            label = 'Placing the prop...',
+            label = 'Placing The Equipment...',
             useWhileDead = false,
             canCancel = true, -- Allow the player to cancel the action
             disableControl = true,
+            
         }) then
             -- The player completed the action
 
@@ -504,8 +505,8 @@ AddEventHandler('onResourceStop', function(resource)
 end)
 
 -- rob gang camp
-RegisterNetEvent('rsg-moonshine:client:robgangcamp')
-AddEventHandler('rsg-moonshine:client:robgangcamp', function(data)
+RegisterNetEvent('rsg-moonshine:client:robmoonshiner')
+AddEventHandler('rsg-moonshine:client:robmoonshiner', function(data)
     local PlayerData = RSGCore.Functions.GetPlayerData()
     local playergang = PlayerData.gang.name
     if playergang ~= data.gang then
@@ -550,7 +551,7 @@ AddEventHandler("rsg-moonshiner:client:moonshine", function()
                 if lib.progressCircle({
                     duration = Config.BrewTime,
                     position = 'bottom',
-                    label = 'Brewing some moonshine...',
+                    label = 'Brewing Some Moonshine...',
                     useWhileDead = false,
                     canCancel = false,
                     anim = {
@@ -559,7 +560,7 @@ AddEventHandler("rsg-moonshiner:client:moonshine", function()
                         flag = 15,
                     },
                     disableControl = true,
-                    text = 'Brewing some moonshine...',
+                    text = 'Brewing Some Moonshine...',
                 }) then
                     -- Give the player some moonshine immediately when the timer is done
                     TriggerServerEvent('rsg-moonshiner:server:givemoonshine', 1)
@@ -656,6 +657,6 @@ AddEventHandler('rsg-moonshiner:client:BreakStill', function()
         Citizen.InvokeNative(0x22970F3A088B133B, smoke, true)
         
         PlaySoundFrontend("SELECT", "RDRO_Character_Creator_Sounds", true, 0)
-        RSGCore.Functions.Notify(Lang:t('your moonshine still has been dismantled'), 'primary')
+        RSGCore.Functions.Notify('Your Moonshine Still Has Been Dismantled')
     end
 end)
